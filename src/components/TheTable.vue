@@ -1,17 +1,20 @@
 <template>
-    <div>
+    <div class="table-wrapper">
         <notificator v-show="notificator.notificatorMessage!==''" :message="notificator.notificatorMessage"
-                     class="table__notificator"/>
-        <add-person-form @post="postPerson"/>
-        <table>
-            <tr>
-                <th>First Name</th>
-                <th>Second Name</th>
-            </tr>
-            <the-table-row v-for="person in persons" :key="person.uuid" :person="person"
-                           @save="saveRow" @remove="removeRow"
-            />
-        </table>
+                     class="table-notificator"/>
+        <div v-if="persons">
+            <add-person-form @post="postPerson"/>
+            <table class="table">
+                <tr class="table__row">
+                    <th class="table__header">Имя</th>
+                    <th class="table__header">Фамилия</th>
+                </tr>
+                <the-table-row v-for="person in persons" :key="person.uuid" :person="person"
+                               @save="saveRow" @remove="removeRow"
+                />
+            </table>
+        </div>
+        <div v-else class="lds-dual-ring"></div>
     </div>
 </template>
 
@@ -65,15 +68,33 @@ export default {
 </script>
 
 <style scoped>
-.table__notificator {
+.table-notificator {
     margin-bottom: 1rem;
 }
 
-.add-panel {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    margin-bottom: 1rem;
+.table {
+    margin: 1rem;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+tr > td:last-of-type {
+    border: none;
+}
+
+.table__header {
+
+}
+
+.table__header {
+    border-bottom: 2px solid #c5e1f3;
+}
+
+
+@media screen and (max-width: 540px) {
+    .table {
+        margin: .5rem;
+    }
 }
 
 </style>
