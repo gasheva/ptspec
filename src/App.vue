@@ -7,10 +7,9 @@
 <script>
 
 import TheTable from '@/components/TheTable';
-import api      from '@/services/api';
 
 export default {
-    name: 'App',
+    name:       'App',
     components: {TheTable},
 };
 </script>
@@ -22,6 +21,9 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+}
+
+body {
+    box-sizing: border-box;
 }
 </style>

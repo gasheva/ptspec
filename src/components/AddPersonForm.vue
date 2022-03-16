@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import server from '@/services/requests';
 
 export default {
     name: 'AddPersonForm',
@@ -22,8 +22,10 @@ export default {
     },
     methods: {
         async postPerson() {
-            // const resp = await api.post();
-            const resp = {firstName: 'fds', secondName: '123124', id: Date.now().toString()};
+            const resp = await server.postPerson(this.newPerson);
+            if (resp === undefined) {
+                return;
+            }
             this.reset();
             this.$emit('post', resp);
         },

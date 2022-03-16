@@ -7,7 +7,7 @@
             <input type="text" v-model.trim="personDisplay.secondName" :class="{'read-only': !isEditing}">
         </td>
         <td>
-            <button @click="$emit('remove', personDisplay.id)">Remove</button>
+            <button @click="remove">Remove</button>
             <button @click="editOrSave">{{ isEditing ? 'Save' : 'Edit' }}</button>
             <button @click="cancel" v-show="isEditing">Cancel</button>
         </td>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import api from '@/services/api';
+import server from '@/services/requests';
 
 export default {
     name:  'TheTableRow',
@@ -41,29 +41,32 @@ export default {
         };
     },
     methods: {
-        editOrSave() {
+        async editOrSave() {
             //  if edit
             if (!this.isEditing) {
                 this.isEditing = true;
                 return;
             }
             //  if save
-            this.save();
+            await this.save();
         },
-        save() {
-            this.isEditing = true;
-            // const resp = api.put()
-            const resp     = {
-                uuid:       'wqe12312-qwaereqr-123qwqe-qweqwe',
-                firstName:  'Ivan',
-                secondName: 'Ivanovich',
+        async save() {
+            const hasChanges = (oldPerson, updatePerson) => {
+                return oldPerson.firstName !== updatePerson.firstName || oldPerson.secondName !== updatePerson.secondName;
             };
+            if (hasChanges(this.person, this.personDisplay)) {
+                const resp = await server.updatePerson(this.personDisplay);
+                resp && this.$emit('save', resp);
+            }
             this.isEditing = false;
-            this.$emit('save', resp);
         },
         cancel() {
             this.personDisplay = Object.assign({}, this.person);
             this.isEditing     = false;
+        },
+        async remove() {
+            const resp = await server.removePerson(this.personDisplay.uuid);
+            resp && this.$emit('remove', this.personDisplay.uuid);
         },
     },
 };

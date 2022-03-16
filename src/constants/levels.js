@@ -1,0 +1,1 @@
+export const LEVELS = {error: 'error', info: 'info', success: 'success'};
